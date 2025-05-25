@@ -11,7 +11,7 @@ k8s_v1 = client.CoreV1Api()
 
 @app.post('/mutate/pod-limits')
 async def set_pod_limits_creation(request: Request):
-    content = request.get_json()
+    content = request.json()
     pod = content['request']['object']
     container = pod['spec']['containers'][0]
     deployment_name = pod['metadata']['labels']['app']

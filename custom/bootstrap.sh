@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # setup autoscaler admission webhook
-kubectl apply -f k8s-scaler/spec.yaml
+kubectl apply -f scaler-ns.yaml
 kubectl apply -f admin-rbac.yaml
+kubectl apply -f k8s-scaler/spec.yaml
 
 # create configmap storing current cpu and memory limits of microservices (scaler k8s namespace created in last step already)
 DEPLOY_JSON="$(kubectl get deploy -o json)"
