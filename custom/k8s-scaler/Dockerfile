@@ -1,4 +1,4 @@
-FROM python:3.14.10-slim
+FROM python:3.12.10-slim
 
 RUN pip install fastapi uvicorn kubernetes
 
