@@ -1,18 +1,18 @@
 global: 
   hpa:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 10
-    targetMemoryUtilizationPercentage: '60'
-    targetCPUUtilizationPercentage: '60'
+    minReplicas: 2
+    maxReplicas: 30
+    targetMemoryUtilizationPercentage: '70'
+    targetCPUUtilizationPercentage: '70'
   resources:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 300m
+      memory: 300Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
-  replicas: 1
+      cpu: 300m
+      memory: 300Mi
+  replicas: 3
   imagePullPolicy: "IfNotPresent"
   restartPolicy: Always
   serviceType: ClusterIP
@@ -22,11 +22,11 @@ global:
     cluster:
       enabled: false
     standalone:
-      enabled: true
+      enabled: false
     replication:
       primary: redis-master
       replica: redis-replicas
-      enabled: false
+      enabled: true
   memcached:
     cluster:
       enabled: false
@@ -58,7 +58,7 @@ mongodb-sharded:
   fullnameOverride: mongodb-sharded
   auth:
     rootPassword: *mongodb-sharded-password
-  shards: 3
+  shards: 4
   shardsvr:
     dataNode:
       replicaCount: 3
@@ -89,4 +89,4 @@ redis:
   replica:
     persistence:
       enabled: false
-    replicaCount: 6
+    replicaCount: 3
