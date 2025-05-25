@@ -9,7 +9,7 @@ config.load_incluster_config()
 
 k8s_v1 = client.CoreV1Api()
 
-@app.post('/mutate/pod_limits')
+@app.post('/mutate/pod-limits')
 async def set_pod_limits_creation(request: Request):
     content = request.get_json()
     pod = content['request']['object']
