@@ -36,7 +36,7 @@ async def set_pod_limits_creation(request: Request):
     # https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers
     return JSONResponse(content = {
         'response': {
-            'uid': content['request']['id'],
+            'uid': content['request']['uid'],
             'allowed': True,
             'patchType': 'JSONPatch',
             'patch': base64.b64encode(json.dumps(new_limits).encode()).decode()
