@@ -20,6 +20,7 @@ logging.basicConfig(
 async def set_pod_limits_creation(request: Request):
     content = await request.json()
     pod = content['request']['object']
+    pod_name = pod['metadata']['name']
     container = pod['spec']['containers'][0]
     deployment_name = pod['metadata']['labels']['app']
 
@@ -31,7 +32,7 @@ async def set_pod_limits_creation(request: Request):
         {'op': 'add', 'path': '/spec/containers/0/resources/limits/cpu', 'value': mem}
     ]
 
-    logging.info(f"[set_pod_limits_creation] Set limits for {deployment_name}: cpu={cpu}, mem={mem}")
+    logging.info(f"[set_pod_limits_creation] Set limits for pod={pod_name} deploy={deployment_name}: cpu={cpu}, mem={mem}")
 
     # https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers
     return JSONResponse(content = {

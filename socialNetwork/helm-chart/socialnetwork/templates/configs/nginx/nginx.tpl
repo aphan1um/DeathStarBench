@@ -77,6 +77,19 @@ http {
     config:set("ssl", false)
   }
 
+  # CUSTOM CODE: Add Prometheus data collection (source code: https://github.com/knyar/nginx-lua-prometheus)
+  init_worker_by_lua_block {
+      prometheus = require("prometheus").init("prometheus_metrics")
+      metric_requests = prometheus:counter("nginx_http_requests_total", "Number of HTTP requests", {"host", "status"})
+      metric_latency = prometheus:histogram("nginx_http_request_duration_seconds", "HTTP request latency", {"host"})
+  }
+
+  log_by_lua_block {
+    metric_requests:inc(1, {ngx.var.server_name, ngx.var.status})
+    metric_latency:observe(tonumber(ngx.var.request_time), {ngx.var.server_name})
+  }
+  # END OF CUSTOM CODE
+
   server {
 
     # Checklist: Set up the port that nginx listens to.
@@ -93,6 +106,15 @@ http {
     # Used when SSL enabled
     lua_ssl_trusted_certificate /keys/CA.pem;
     lua_ssl_ciphers ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH;
+
+    # CUSTOM CODE: Expose so Prometheus can pull traffic-related metrics
+    location /metrics {
+        content_by_lua_block {
+            prometheus:collect()
+        }
+    }
+    # END OF CUSTOM CODE
+
 
     # Checklist: Make sure that the location here is consistent
     # with the location you specified in wrk2.
