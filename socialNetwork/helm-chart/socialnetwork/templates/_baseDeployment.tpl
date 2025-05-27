@@ -24,6 +24,11 @@ spec:
       - name: "{{ .name }}"
         image: {{ .dockerRegistry | default $.Values.global.dockerRegistry }}/{{ .image }}:{{ .imageVersion | default $.Values.global.defaultImageVersion }}
         imagePullPolicy: {{ .imagePullPolicy | default $.Values.global.imagePullPolicy }}
+        resizePolicy:
+        - resourceName: cpu
+          restartPolicy: NotRequired
+        - resourceName: memory
+          restartPolicy: NotRequired
         ports:
         {{- range $cport := .ports }}
         - containerPort: {{ $cport.containerPort -}}

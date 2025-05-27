@@ -9,7 +9,8 @@ container:
   imageVersion: xenial
   name: media-frontend
   ports: 
-  - containerPort: 8081
+    - containerPort: 8081
+      name: nginx-port
   env:
   - name: fqdn_suffix
     value: ".{{ .Release.Namespace }}.svc.cluster.local"

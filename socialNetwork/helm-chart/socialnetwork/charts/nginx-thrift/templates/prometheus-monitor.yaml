@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    app: nginx-thrift
+    release: prometheus
+  name: nginx-thrift
+  namespace: monitor
+spec:
+  podMetricsEndpoints:
+    - path: /metrics 
+      port: nginx-port
+      interval: 15s
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app: nginx-thrift

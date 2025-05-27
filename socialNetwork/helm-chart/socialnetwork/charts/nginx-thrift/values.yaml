@@ -9,7 +9,8 @@ container:
   imageVersion: xenial
   name: nginx-thrift
   ports: 
-  - containerPort: 8080
+    - containerPort: 8080
+      name: nginx-port
   env:
   - name: fqdn_suffix
     value: ".{{ .Release.Namespace }}.svc.cluster.local"
@@ -42,7 +43,7 @@ initContainer:
   - name: keys
     mountPath: /keys
   command: "/bin/sh" 
-  args: ["-c", "git clone https://github.com/aphan1um/DeathStarBench.git /DeathStarBench &&
+  args: ["-c", "git clone https://github.com/aphan1um/DeathStarBench.git --depth=1 /DeathStarBench &&
             cp -r /DeathStarBench/socialNetwork/gen-lua/* /gen-lua/ &&
             cp -r /DeathStarBench/socialNetwork/docker/openresty-thrift/lua-thrift/* /lua-thrift/ &&
             cp -r /DeathStarBench/socialNetwork/nginx-web-server/lua-scripts/* /lua-scripts/ &&

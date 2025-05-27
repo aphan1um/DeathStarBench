@@ -23,7 +23,8 @@ spec:
         imagePullPolicy: {{ .imagePullPolicy | default $.Values.global.imagePullPolicy }}
         ports:
         {{- range $cport := .ports }}
-        - containerPort: {{ $cport.containerPort -}}
+        - name: "{{ $cport.name }}"
+          containerPort: {{ $cport.containerPort -}}
         {{ end }} 
         {{- if .env }}
         env:

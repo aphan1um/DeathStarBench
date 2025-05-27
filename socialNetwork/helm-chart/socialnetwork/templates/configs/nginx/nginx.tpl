@@ -32,7 +32,7 @@ http {
   log_format main '$remote_addr - $remote_user [$time_local] "$request"'
                   '$status $body_bytes_sent "$http_referer" '
                   '"$http_user_agent" "$http_x_forwarded_for"';
-  # access_log  logs/access.log  main;
+  # access_log  /dev/stdout  main;
 
   sendfile        on;
   tcp_nopush      on;
@@ -78,6 +78,7 @@ http {
   }
 
   # CUSTOM CODE: Add Prometheus data collection (source code: https://github.com/knyar/nginx-lua-prometheus)
+  lua_shared_dict prometheus_metrics 8M;
   init_worker_by_lua_block {
       prometheus = require("prometheus").init("prometheus_metrics")
       metric_requests = prometheus:counter("nginx_http_requests_total", "Number of HTTP requests", {"host", "status"})
