@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pod-limit-enforcer-cert
+  namespace: scaler
+type: kubernetes.io/tls
+data:
+  tls.key: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRRFBWMUFTbGZZakJmVnUKSFNmR0tPclplMkowMEJYaWdpTlRTRUMxMGUrRHJGMjJQREYzbGF1TGZ4Uzd6SElkamFjRXRRUU1RUmpHMUFLcwpqRFRWbCtEc05ldHowTGFhTEZnNUd0NTVnOWdlYUZpZUdlbmgzUkFBV0taeXhXNGo3YTdlMk9OeDZmb3ZxN1FjCktXakhZdUVod2JlbzlQRkhNT2tvTlpZVnNoVjVRYVRQcG9TSVlqT1NGVzI1Q1NvcHpKaEx2dFVFaDBrOVhTMkoKNHcyRzRIM29TMFFlM21pa2FBMTFqSEppeWF1Z3NOaUh6K3VkdE1LZDNzanFTeFZVVzJnRlF0TE0vYTMxY1JCYgo3U1paQnJRUE5EN1FZajBvQmFIWll6b0xNemZ2dE11UE16NFFoWEZGbFlGemFCSjUzNWpCb3BSUXZZQUFKd2FkClNMRFlUN2c1QWdNQkFBRUNnZ0VBSVovM0RpQ1FRM05JcjJRZWltb2gxZ1hHdkl0dmRTV21QWEFiQUhHTW5vWEMKUjliQXJmUlJsdVNUMC9YdXJzREZiSU8vcFk0Y0NzaWdxMk5zZ1JRcHA1MEI4MjBPWS9mYmtkMDc1YWgrVU1ZYQowdjhBV1Q3OHhKV2Izc0tLWDF6QkxvWXRjcENmb0lIL3lrNWozZXY0OXp5L2dIREN2VWtmRXNTSDg3cEc5YnduCkZkUUZsYmhYRGh1dXBjcENHMlNHemZZbTNxbUtYbFcwMER6UElLRU0rbExpV1E1aWdGeEtQWlRVSDBDc0lBcEMKM1ZFQ1pkQU5MakFvQmUzbi80cEJKbmxQR050aUswSHNjYWh2VjZvVWRqL2IrbXNKcVhMRzJFYUxMWFdra2ZSegpzbm1zNXpBZDQ2RXB1WGZCMlM0S21JdStrNDdadHpzOFY3Mm1YU2tPMVFLQmdRRHFTVVhILzdQZy9WRlREZTFwClJhNkZpbThQKy9LU1VNQWluVSttT2dsSHRxSGdOMjFxQ2pBa3Nla3lQcGxSR2c3Zk56M3pqRW4wblRQb2swencKS0hYSHVJR01zbmQ5OGxhc255d2pJWmVPdkE1UkJUQ3pDZ0g5OWQ1RTFHdGVVT1F6MjBNWDVFcXI4akFTeng4Kwo0eWw1Q1BFczBlLy9kUTdaUjA5NTA5TFdEUUtCZ1FEaWpydkFGajhocXc4Qi80cHZRRjNUZmRieTFUcnBrZFd2Clk4cExZUXVQeWFWNDFqNXQxY3ZFODBlVlllWG5oOWlHMHBBNng5UFBvUE5mVXJhSmUyYTRkWmhVcDI2Zndsc04KT01ZRnlSQ0VtUmdvWnZNNXBNeVRxOHdma0g3L3ZjY2Q1Mm9mRHZVcURQV1RyQVhWYWpDUmV5ZTZQUEgvdmxXSwoxY3ZJNTB2cjNRS0JnQkoxQVUxWFJLbUY2MkU2cUtoeGQrVkhXYWFOdDdkMUt4M08vTlpnbmhpTE44ZDlObDV6ClBRVzNDbU1OOFhBbE9HUzNhbWNFZDFNUkMyVFlMZWlCbDMzTGVGRklRZ2VuRHRMOG16S05VKzVIdkd6L2xxMlUKTFVIL202b2FmZmJwTW9FdlZlTE05bUVEYkd3ZTZ4dytNeWM0NEI4aXp1QjJMVnhLdE9VcEhlUUZBb0dBZCtNQQpCMDIrYXBxU2ZvUXpSVnZTU3JBMHBwdWZhU242NGF6MHg1NjY5NFBGUklSYTFOUmwxL3JFem8vWGtRV1oxdjVsCnhEVXFLSjBMTEU0Z3VlL0xFNkZtMHFVbkxQTTBLM0wzbHVnbkRZUFYvTXM5dWlzeTlwSGFtbmxrT3dDNTlXRVkKRHdkalJMVkczcllSQURZSkxYTDJPdDgxVUJmd1BGK1dUdUhXa3lFQ2dZQStwNWdzU3ptUWRZbGRyOFBKcVVQNQoxTVVoNzRNT0FvNzM3V3NpNmZPdzhRTnFhNXVkYVJJV1dpM0xMS1hXRnZ0UW9OWUxVTVhrZ0E1SS9lYUtkaklJCnVZSlhDL0pnN3hIOGJ0NE40WE9oVWZBTHRERmxtcVNTYW9UeFdZTW1veFVnQ240c0RBM0hFR21FMVF6SFI4ZG4KRVpjdUtSZXptckt4WnpnbmwwR1g5UT09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K"
+  tls.crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURjakNDQWxxZ0F3SUJBZ0lVSy9DZE9KQTdqMlM4M0VQeW5CMGJDNWN1ZDVjd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0tERW1NQ1FHQTFVRUF3d2RjRzlrTFd4cGJXbDBMV1Z1Wm05eVkyVnlMbk5qWVd4bGNpNXpkbU13SGhjTgpNalV3TlRJM01ETXlNVEl5V2hjTk16VXdOVEkxTURNeU1USXlXakFvTVNZd0pBWURWUVFEREIxd2IyUXRiR2x0CmFYUXRaVzVtYjNKalpYSXVjMk5oYkdWeUxuTjJZekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0MKQVFvQ2dnRUJBTTlYVUJLVjlpTUY5VzRkSjhZbzZ0bDdZblRRRmVLQ0kxTklRTFhSNzRPc1hiWThNWGVWcTR0LwpGTHZNY2gyTnB3UzFCQXhCR01iVUFxeU1OTldYNE93MTYzUFF0cG9zV0RrYTNubUQyQjVvV0o0WjZlSGRFQUJZCnBuTEZiaVB0cnQ3WTQzSHAraStydEJ3cGFNZGk0U0hCdDZqMDhVY3c2U2cxbGhXeUZYbEJwTSttaEloaU01SVYKYmJrSktpbk1tRXUrMVFTSFNUMWRMWW5qRFliZ2ZlaExSQjdlYUtSb0RYV01jbUxKcTZDdzJJZlA2NTIwd3AzZQp5T3BMRlZSYmFBVkMwc3o5cmZWeEVGdnRKbGtHdEE4MFB0QmlQU2dGb2Rsak9nc3pOKysweTQ4elBoQ0ZjVVdWCmdYTm9Fbm5mbU1HaWxGQzlnQUFuQnAxSXNOaFB1RGtDQXdFQUFhT0JrekNCa0RBSkJnTlZIUk1FQWpBQU1Bc0cKQTFVZER3UUVBd0lGNERCWEJnTlZIUkVFVURCT2doMXdiMlF0YkdsdGFYUXRaVzVtYjNKalpYSXVjMk5oYkdWeQpMbk4yWTRJWmNHOWtMV3hwYldsMExXVnVabTl5WTJWeUxuTmpZV3hsY29JU2NHOWtMV3hwYldsMExXVnVabTl5ClkyVnlNQjBHQTFVZERnUVdCQlJqMU5oN3NWaGxrelplWE02N1drWmJDN0xKSXpBTkJna3Foa2lHOXcwQkFRc0YKQUFPQ0FRRUFYZzFGZ2loMS9taTR2N0NCbW16RE9nUnNoQ1Y4SVpLdW5DZWxNOGRNaHBOZThEMExxNmVmTWJDSQozUCszbFM3cjJGTDArTnY5djFBREhNaGlnWGluSXh0eSs3N1pMNjd4Nkx0T0Qwc1l4SGFVdjA3WUdFdXdycFM4Cjc0ZDY2aG5xdmRGNVV5VlBTKzFHOTlOVUZhNU9VUTFNNWdOdTNkZXJ1SDBLS0hhVFNrMVhja3VaTTNjZkFaSi8KV1dsNm5UMm5wWnFyZHhHNjFpZHV5eDVqWlNYRHI5QVovSGtTTFBDL05zUm5GeFYwZ0xpb0MrQ2NPL0dKemw4ZgpjZlR3MjFqbWFTeS9NSEFWUTVMamVSTVVKZ3llZFR1VmVVSHRDQlNhejFSa3ByYUlTa2xYbFE2YzRNbmt6QzhRCkd3akhOQyt1NENYU1FxVnFOYldBRmYzMEVQV1N6Zz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pod-limit-enforcer
+  namespace: scaler
+spec:
+  selector:
+    app: pod-limit-enforcer
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-limit-enforcer
+  namespace: scaler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-limit-enforcer
+  template:
+    metadata:
+      labels:
+        app: pod-limit-enforcer
+    spec:
+      containers:
+        - name: webhook
+          image: aphan1um/k8s-python
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - mountPath: /app
+              name: appcode
+            - name: certs
+              mountPath: /app/certs
+              readOnly: true
+          command:
+            - "uvicorn"
+          args:
+            - "main:app"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "443"
+            - "--ssl-keyfile"
+            - "certs/tls.key"
+            - "--ssl-certfile"
+            - "certs/tls.crt"
+      initContainers:
+        - image: alpine/git
+          name: alpine-container
+          volumeMounts:
+            - name: appcode
+              mountPath: /app
+          command: ["/bin/sh"] 
+          args: ["-c", "git clone --depth=1 
+                    https://github.com/aphan1um/DeathStarBench.git /DeathStarBench &&
+                    cp -r /DeathStarBench/custom/pod-limit-enforcer/app/* /app"]
+      volumes:
+      - name: appcode
+        emptyDir: {}
+      - name: certs
+        secret:
+          secretName: pod-limit-enforcer-cert
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-limit-enforcer
+webhooks:
+  - name: limits.create.pods.pod-limit-enforcer
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+    clientConfig:
+      service:
+        name: pod-limit-enforcer
+        namespace: scaler
+        path: "/mutate/pod-limits"
+      caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURjakNDQWxxZ0F3SUJBZ0lVSy9DZE9KQTdqMlM4M0VQeW5CMGJDNWN1ZDVjd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0tERW1NQ1FHQTFVRUF3d2RjRzlrTFd4cGJXbDBMV1Z1Wm05eVkyVnlMbk5qWVd4bGNpNXpkbU13SGhjTgpNalV3TlRJM01ETXlNVEl5V2hjTk16VXdOVEkxTURNeU1USXlXakFvTVNZd0pBWURWUVFEREIxd2IyUXRiR2x0CmFYUXRaVzVtYjNKalpYSXVjMk5oYkdWeUxuTjJZekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0MKQVFvQ2dnRUJBTTlYVUJLVjlpTUY5VzRkSjhZbzZ0bDdZblRRRmVLQ0kxTklRTFhSNzRPc1hiWThNWGVWcTR0LwpGTHZNY2gyTnB3UzFCQXhCR01iVUFxeU1OTldYNE93MTYzUFF0cG9zV0RrYTNubUQyQjVvV0o0WjZlSGRFQUJZCnBuTEZiaVB0cnQ3WTQzSHAraStydEJ3cGFNZGk0U0hCdDZqMDhVY3c2U2cxbGhXeUZYbEJwTSttaEloaU01SVYKYmJrSktpbk1tRXUrMVFTSFNUMWRMWW5qRFliZ2ZlaExSQjdlYUtSb0RYV01jbUxKcTZDdzJJZlA2NTIwd3AzZQp5T3BMRlZSYmFBVkMwc3o5cmZWeEVGdnRKbGtHdEE4MFB0QmlQU2dGb2Rsak9nc3pOKysweTQ4elBoQ0ZjVVdWCmdYTm9Fbm5mbU1HaWxGQzlnQUFuQnAxSXNOaFB1RGtDQXdFQUFhT0JrekNCa0RBSkJnTlZIUk1FQWpBQU1Bc0cKQTFVZER3UUVBd0lGNERCWEJnTlZIUkVFVURCT2doMXdiMlF0YkdsdGFYUXRaVzVtYjNKalpYSXVjMk5oYkdWeQpMbk4yWTRJWmNHOWtMV3hwYldsMExXVnVabTl5WTJWeUxuTmpZV3hsY29JU2NHOWtMV3hwYldsMExXVnVabTl5ClkyVnlNQjBHQTFVZERnUVdCQlJqMU5oN3NWaGxrelplWE02N1drWmJDN0xKSXpBTkJna3Foa2lHOXcwQkFRc0YKQUFPQ0FRRUFYZzFGZ2loMS9taTR2N0NCbW16RE9nUnNoQ1Y4SVpLdW5DZWxNOGRNaHBOZThEMExxNmVmTWJDSQozUCszbFM3cjJGTDArTnY5djFBREhNaGlnWGluSXh0eSs3N1pMNjd4Nkx0T0Qwc1l4SGFVdjA3WUdFdXdycFM4Cjc0ZDY2aG5xdmRGNVV5VlBTKzFHOTlOVUZhNU9VUTFNNWdOdTNkZXJ1SDBLS0hhVFNrMVhja3VaTTNjZkFaSi8KV1dsNm5UMm5wWnFyZHhHNjFpZHV5eDVqWlNYRHI5QVovSGtTTFBDL05zUm5GeFYwZ0xpb0MrQ2NPL0dKemw4ZgpjZlR3MjFqbWFTeS9NSEFWUTVMamVSTVVKZ3llZFR1VmVVSHRDQlNhejFSa3ByYUlTa2xYbFE2YzRNbmt6QzhRCkd3akhOQyt1NENYU1FxVnFOYldBRmYzMEVQV1N6Zz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
