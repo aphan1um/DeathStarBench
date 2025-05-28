@@ -14,12 +14,11 @@ spec:
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: scaling-agent
   namespace: scaler
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: scaling-agent

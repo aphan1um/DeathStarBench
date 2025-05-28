@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
 
-  k8s_deployments = apps_v1.list_namespaced_deployment(namespace="default")
+  k8s_deployments = apps_v1.list_namespaced_deployment(namespace="default").items
   ALL_SERVICES = sorted([d.metadata.name for d in k8s_deployments])
   logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
 
