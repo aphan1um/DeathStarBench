@@ -62,3 +62,11 @@ async def get_service_metrics(request: Request):
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success))
     })
+
+@app.get('/service')
+async def get_service_metrics(request: Request):
+    global ALL_SERVICES
+    return JSONResponse(content = {
+        'services': ALL_SERVICES,
+        'total_services': len(ALL_SERVICES)
+    })
