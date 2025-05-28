@@ -4,13 +4,10 @@ import logging
 
 PROMETHEUS_HOSTNAME = os.getenv('PROMETHEUS_HOSTNAME')
 
-def execute_promql_query(query, time=None):
+def execute_promql_query(query, time):
   response = requests.get(
     f'http://{PROMETHEUS_HOSTNAME}/api/v1/query',
-    params={
-      query=query,
-      time=time
-    }
+    params={'query': query, 'time': time}
   )
 
   response_json = response.json()

@@ -43,7 +43,7 @@ spec:
             - "8080"
           env:
             - name: PROMETHEUS_HOSTNAME
-            - value: prometheus-kube-prometheus-prometheus.monitor.svc.cluster.local:9090
+              value: prometheus-kube-prometheus-prometheus.monitor.svc.cluster.local:9090
           volumeMounts:
             - mountPath: /app
               name: appcode
