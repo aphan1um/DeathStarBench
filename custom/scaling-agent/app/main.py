@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
   ALL_SERVICES = sorted([d.metadata.name for d in k8s_deployments])
   logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
 
-  logging.info('Maximum amount of pods per service: ' + ALL_SERVICES_MAX_REPLICAS)
+  logging.info('Maximum amount of pods per service: ' + str(ALL_SERVICES_MAX_REPLICAS))
   yield
 
 app = FastAPI(lifespan=lifespan)
