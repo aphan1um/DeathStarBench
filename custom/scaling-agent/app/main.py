@@ -33,6 +33,7 @@ async def lifespan(app: FastAPI):
   logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
 
   logging.info('Maximum amount of pods per service: ' + ALL_SERVICES_MAX_REPLICAS)
+  yield
 
 app = FastAPI(lifespan=lifespan)
 
