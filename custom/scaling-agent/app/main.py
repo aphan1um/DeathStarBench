@@ -1,3 +1,5 @@
+from kubernetes import client, config
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -5,20 +7,34 @@ from util import execute_promql_query, parse_promql_response_by_service, parse_p
 
 import logging
 import math
+import os
 import time
 
 TIME_OFFSET = 5
 ALL_SERVICES = None
+ALL_SERVICES_MAX_REPLICAS = int(os.getenv('ALL_SERVICES_MAX_REPLICAS'))
 
-app = FastAPI()
 logging.basicConfig(
     level   = logging.INFO,
     format  = "%(asctime)s [%(levelname)s] %(message)s",
     datefmt = "%Y-%m-%d %H:%M:%S"
 )
 
-# TODO: Invoke K8s API to scale
-# config.load_incluster_config()
+# retrieve some resource data from Kubernetes before server initialises
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+  global ALL_SERVICES
+
+  config.load_incluster_config()
+  apps_v1 = client.AppsV1Api()
+
+  k8s_deployments = apps_v1.list_namespaced_deployment(namespace="default")
+  ALL_SERVICES = sorted([d.metadata.name for d in k8s_deployments])
+  logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
+
+  logging.info('Maximum amount of pods per service: ' + ALL_SERVICES_MAX_REPLICAS)
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get('/service/metrics')
 async def get_service_metrics(request: Request):
@@ -36,11 +52,7 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ))
 
-    if ALL_SERVICES is None:
-      ALL_SERVICES = sorted(services_cpu.keys())
-      logging.info('Obtained services for the first time: [' + ','.join(ALL_SERVICES) + ']')
-
-    # to be used to calculate rewards
+    # to be also used calculate rewards
     raw_tps = parse_promql_get_value(execute_promql_query(
       'sum(rate(nginx_http_requests_total[35s]))',
       query_timestamp
@@ -51,16 +63,22 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ))
 
+    raw_request_latency = parse_promql_get_value(execute_promql_query(
+      'rate(nginx_http_request_duration_seconds_sum[35s])',
+      query_timestamp
+    )) # note this is in seconds
+
     return JSONResponse(content = {
         'services': [
           [
-            round(float(services_cpu[svc]), 4),
-            round(float(services_mem[svc]), 4)
+            round(float(services_cpu[svc]), 5),
+            round(float(services_mem[svc]), 5)
           ]
           for svc in ALL_SERVICES
         ],
         'tps': math.ceil(float(raw_tps)),
-        'tps_success': math.ceil(float(raw_tps_success))
+        'tps_success': math.ceil(float(raw_tps_success)),
+        'latency_seconds': round(float(raw_request_latency), 3)
     })
 
 @app.get('/service')

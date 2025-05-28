@@ -27,10 +27,10 @@ spec:
                 https://github.com/aphan1um/DeathStarBench.git /DeathStarBench &&
                 cp -r /DeathStarBench/socialNetwork/wrk2/* /scripts/socialNetwork"]
   restartPolicy: Never
-  tolerations:
-    - effect: NoSchedule
-      key: wrk2
-      operator: Exists
+  # tolerations:
+  #   - effect: NoSchedule
+  #     key: wrk2
+  #     operator: Exists
   volumes:
   - name: scripts
     emptyDir: {}
