@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from util import execute_promql_query, parse_promql_response_by_service
+from util import execute_promql_query, parse_promql_response_by_service, parse_promql_get_value
 
 import logging
 import time
