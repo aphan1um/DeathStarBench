@@ -12,7 +12,7 @@ def execute_promql_query(query, time):
 
   response_json = response.json()
 
-  if data['status'] != 'success':
+  if response_json['status'] != 'success':
     logging.error(f'Query has failed: {query}')
     return None
   
