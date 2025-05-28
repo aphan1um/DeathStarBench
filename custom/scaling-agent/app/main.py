@@ -53,7 +53,7 @@ async def get_service_metrics(request: Request):
     return JSONResponse(content = {
         'services': [
           [
-            round(float(services_cpu[svc], 4)),
+            round(float(services_cpu[svc]), 4),
             round(float(services_mem[svc]), 4)
           ]
           for svc in ALL_SERVICES
