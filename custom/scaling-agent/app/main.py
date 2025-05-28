@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from util import execute_promql_query, parse_promql_response_by_service, parse_promql_get_value
 
 import logging
+import math
 import time
 
 TIME_OFFSET = 5
@@ -58,6 +59,6 @@ async def get_service_metrics(request: Request):
           ]
           for svc in ALL_SERVICES
         ],
-        'tps': int(raw_tps),
-        'tps_success': int(raw_tps_success)
+        'tps': math.ceil(float(raw_tps)),
+        'tps_success': math.ceil(float(raw_tps_success))
     })
