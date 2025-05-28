@@ -21,6 +21,7 @@ logging.basicConfig(
 
 @app.get('/service/metrics')
 async def get_service_metrics(request: Request):
+    global ALL_SERVICES
     query_timestamp = int(time.time() - TIME_OFFSET)
 
     # used to define state space
