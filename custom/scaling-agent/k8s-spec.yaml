@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scaling-agent
+  namespace: scaler
+spec:
+  selector:
+    app: scaling-agent
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scaling-agent
+  namespace: scaler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scaling-agent
+  template:
+    metadata:
+      labels:
+        app: scaling-agent
+    spec:
+      containers:
+        - name: webhook
+          image: aphan1um/k8s-python
+          ports:
+            - containerPort: 8080
+          command:
+            - "uvicorn"
+          args:
+            - "main:app"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "8080"
+          env:
+            - name: PROMETHEUS_HOSTNAME
+            - value: prometheus-kube-prometheus-prometheus.monitor.svc.cluster.local:9090
+          volumeMounts:
+            - mountPath: /app
+              name: appcode
+      initContainers:
+        - image: alpine/git
+          name: alpine-container
+          volumeMounts:
+            - name: appcode
+              mountPath: /app
+          command: ["/bin/sh"] 
+          args: ["-c", "git clone --depth=1 
+                    https://github.com/aphan1um/DeathStarBench.git --depth=1 /DeathStarBench &&
+                    cp -r /DeathStarBench/custom/scaling-agent/app/* /app"]
+      volumes:
+      - name: appcode
+        emptyDir: {}
