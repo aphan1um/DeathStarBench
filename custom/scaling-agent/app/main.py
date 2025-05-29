@@ -25,6 +25,7 @@ logging.basicConfig(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
   global ALL_SERVICES
+  global ALL_SERVICES_TYPE
 
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
