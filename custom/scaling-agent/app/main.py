@@ -40,7 +40,7 @@ async def lifespan(app: FastAPI):
 
   all_services = apps_v1.list_namespaced_deployment(namespace='default').items
   all_services = all_services + apps_v1.list_namespaced_stateful_set(namespace='default').items
-  all_services = sorted([svc for svc in all_services if has_valid_selector_label(svc)], lambda s: s.metadata.name)
+  all_services = sorted([svc for svc in all_services if has_valid_selector_label(svc)], key=lambda s: s.metadata.name)
 
   for idx, svc in enumerate(all_services):
     # observe 1st container in pod only
