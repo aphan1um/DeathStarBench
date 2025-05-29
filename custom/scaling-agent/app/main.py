@@ -13,6 +13,8 @@ import time
 TIME_OFFSET = 5
 ALL_SERVICES = []
 ALL_SERVICES_TYPE = []
+CONTAINER_NAME_TO_SERVICE_IDX = {}
+
 ALL_SERVICES_MAX_REPLICAS = int(os.getenv('ALL_SERVICES_MAX_REPLICAS'))
 
 logging.basicConfig(
@@ -26,25 +28,30 @@ logging.basicConfig(
 async def lifespan(app: FastAPI):
   global ALL_SERVICES
   global ALL_SERVICES_TYPE
+  global CONTAINER_NAME_TO_SERVICE_IDX
 
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
 
+  # check and filter deployment or statefulset has 'service' label defined for pods created by them
+  # we will use these as being eligible for horizontal scaling at the container level
   def has_valid_selector_label(k8s_object):
     return 'service' in k8s_object.spec.template.metadata.labels and k8s_object.spec.template.metadata.labels['service'] == k8s_object.metadata.name
 
-  k8s_deployments = apps_v1.list_namespaced_deployment(namespace='default').items
-  k8s_deployments =  [d for d in k8s_deployments if has_valid_selector_label(d)]
-  k8s_deployments_names = sorted([d.metadata.name for d in k8s_deployments])
-  ALL_SERVICES = ALL_SERVICES + k8s_deployments_names
-  ALL_SERVICES_TYPE = ALL_SERVICES_TYPE + ['deploy'] * len(k8s_deployments_names)
+  all_services = apps_v1.list_namespaced_deployment(namespace='default').items
+  all_services = all_services + apps_v1.list_namespaced_stateful_set(namespace='default').items
+  all_services = sorted([svc for svc in all_services if has_valid_selector_label(svc)], lambda s: s.metadata.name)
 
-  # also handle stateful sets
-  k8s_statefulsets = apps_v1.list_namespaced_stateful_set(namespace='default').items
-  k8s_statefulsets = [s for s in k8s_statefulsets if has_valid_selector_label(s)]
-  k8s_statefulset_names = [s.metadata.name for s in k8s_statefulsets]
-  ALL_SERVICES = ALL_SERVICES + k8s_statefulset_names
-  ALL_SERVICES_TYPE = ALL_SERVICES_TYPE + ['statefulset'] * len(k8s_statefulset_names)
+  for idx, svc in enumerate(all_services):
+    # observe 1st container in pod only
+    container_name = svc.spec.template.spec.containers[0].name
+    if container_name in CONTAINER_NAME_TO_SERVICE_IDX:
+      raise Exception('Found duplicate container name from a service')
+    CONTAINER_NAME_TO_SERVICE_IDX[container_name] = idx
+
+  # combine
+  ALL_SERVICES = [d.metadata.name for d in all_services]
+  ALL_SERVICES_TYPE = [d.kind for d in all_services]
 
   logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
   logging.info('Maximum amount of pods per service: ' + str(ALL_SERVICES_MAX_REPLICAS))
