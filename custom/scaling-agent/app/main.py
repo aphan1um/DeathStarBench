@@ -40,7 +40,7 @@ async def lifespan(app: FastAPI):
   ALL_SERVICES_TYPE = ALL_SERVICES_TYPE + ['deploy'] * len(k8s_deployments_names)
 
   # also handle stateful sets
-  k8s_statefulsets = apps_v1.list_namespaced_stateful_set(namespace='default').items()
+  k8s_statefulsets = apps_v1.list_namespaced_stateful_set(namespace='default').items
   k8s_statefulsets = [s for s in k8s_statefulsets if has_valid_selector_label(s)]
   k8s_statefulset_names = [s.metadata.name for s in k8s_statefulsets]
   ALL_SERVICES = ALL_SERVICES + k8s_statefulset_names
