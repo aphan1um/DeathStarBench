@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
   apps_v1 = client.AppsV1Api()
 
   def has_valid_selector_label(k8s_object):
-    return 'service' in k8s_object.spec.template.metadata.labels and k8s_object.spec.template.metadata.labels == k8s_object.metadata.name
+    return 'service' in k8s_object.spec.template.metadata.labels and k8s_object.spec.template.metadata.labels['service'] == k8s_object.metadata.name
 
   k8s_deployments = apps_v1.list_namespaced_deployment(namespace='default').items
   k8s_deployments =  [d for d in k8s_deployments if has_valid_selector_label(d)]
