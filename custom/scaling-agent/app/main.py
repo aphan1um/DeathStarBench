@@ -29,8 +29,8 @@ async def lifespan(app: FastAPI):
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
 
-  def has_valid_selector_label(k):
-    return 'service' in s.spec.selector['matchLabels'] and s.spec.selector['matchLabels']['service'] == s.metadata.name
+  def has_valid_selector_label(k8s_object):
+    return 'service' in k8s_object.spec.selector['matchLabels'] and k8s_object.spec.selector['matchLabels']['service'] == k8s_object.metadata.name
 
   k8s_deployments = apps_v1.list_namespaced_deployment(namespace='default').items
   k8s_deployments =  [d for d in k8s_deployments if has_valid_selector_label(d)]
