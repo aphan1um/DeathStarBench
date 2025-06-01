@@ -1,18 +1,18 @@
 global: 
   hpa:
-    enabled: false
-    minReplicas: 2
-    maxReplicas: 30
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
     targetMemoryUtilizationPercentage: '70'
     targetCPUUtilizationPercentage: '70'
   resources:
     limits:
-      cpu: 300m
-      memory: 300Mi
+      cpu: 500m
+      memory: 500Mi
     requests:
-      cpu: 300m
-      memory: 300Mi
-  replicas: 3
+      cpu: 500m
+      memory: 500Mi
+  replicas: 1
   imagePullPolicy: "IfNotPresent"
   restartPolicy: Always
   serviceType: ClusterIP
@@ -51,7 +51,7 @@ global:
     bufferFlushInterval: 10
     samplerType: probabilistic
     samplerParam: 0.1
-    disabled: false
+    disabled: true
     logSpans: false
 
 mongodb-sharded:
@@ -90,3 +90,5 @@ redis:
     persistence:
       enabled: false
     replicaCount: 3
+    podLabels:
+      service: redis-replicas
