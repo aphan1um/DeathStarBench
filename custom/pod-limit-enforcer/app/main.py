@@ -16,6 +16,8 @@ logging.basicConfig(
     datefmt = "%Y-%m-%d %H:%M:%S"
 )
 
+# since modifying a deployment's specification forces to terminate old pods, we will set them to the right
+# values prior to running the pod, as given by the RL agent and the config map
 @app.post('/mutate/pod-limits')
 async def set_pod_limits_creation(request: Request):
     content = await request.json()

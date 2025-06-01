@@ -22,11 +22,11 @@ global:
     cluster:
       enabled: false
     standalone:
-      enabled: false
+      enabled: true
     replication:
       primary: redis-master
       replica: redis-replicas
-      enabled: true
+      enabled: false
   memcached:
     cluster:
       enabled: false
@@ -89,6 +89,6 @@ redis:
   replica:
     persistence:
       enabled: false
-    replicaCount: 3
+    replicaCount: 4
     podLabels:
       service: redis-replicas

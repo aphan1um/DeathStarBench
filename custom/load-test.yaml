@@ -7,9 +7,6 @@ metadata:
 spec:
   containers:
     - args: ["/bin/sh", "-c", "sleep 365d"]
-      env:
-        - name: service_hostname
-          value: nginx-thrift
       volumeMounts:
         - mountPath: /scripts
           name: scripts
@@ -24,13 +21,13 @@ spec:
           mountPath: /scripts
       command: ["/bin/sh"] 
       args: ["-c", "git clone --depth=1 
-                https://github.com/aphan1um/DeathStarBench.git /DeathStarBench &&
+                https://gitlab.engr.illinois.edu/DEPEND/firm.git /DeathStarBench &&
                 cp -r /DeathStarBench/socialNetwork/wrk2/* /scripts/socialNetwork"]
   restartPolicy: Never
-  # tolerations:
-  #   - effect: NoSchedule
-  #     key: wrk2
-  #     operator: Exists
+  tolerations:
+    - effect: NoSchedule
+      key: is-monitor
+      operator: Exists
   volumes:
   - name: scripts
     emptyDir: {}
