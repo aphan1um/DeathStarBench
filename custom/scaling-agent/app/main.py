@@ -98,7 +98,7 @@ async def get_service_metrics(request: Request):
           [
             round(float(services_cpu.get(svc, 0)), 5),
             round(float(services_mem.get(svc, 0)), 5),
-            total_replicas.get(svc, 1),
+            int(total_replicas.get(svc, 1)),
           ]
           for svc in ALL_SERVICES
         ],
