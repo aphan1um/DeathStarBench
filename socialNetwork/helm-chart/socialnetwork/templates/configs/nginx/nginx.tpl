@@ -82,7 +82,12 @@ http {
   init_worker_by_lua_block {
       prometheus = require("prometheus").init("prometheus_metrics")
       metric_requests = prometheus:counter("nginx_http_requests_total", "Number of HTTP requests", {"host", "status"})
-      metric_latency = prometheus:histogram("nginx_http_request_duration_seconds", "HTTP request latency", {"host"})
+      metric_latency = prometheus:histogram(
+        "nginx_http_request_duration_seconds",
+        "HTTP request latency",
+        {"host"},
+        {0.01, 0.025, 0.05, 0.075, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 1.5, 2, 4, 6, 8, 10, 15}
+      )
   }
 
   log_by_lua_block {
