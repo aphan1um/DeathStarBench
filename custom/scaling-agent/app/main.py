@@ -22,6 +22,7 @@ logging.basicConfig(
 )
 
 apps_v1 = None
+v1 = None
 
 # retrieve some resource data from Kubernetes before server initialises
 @asynccontextmanager
@@ -29,10 +30,11 @@ async def lifespan(app: FastAPI):
   global ALL_SERVICES
   global ALL_SERVICES_TYPE
   global CONTAINER_NAME_TO_SERVICE_IDX
-  global apps_v1
+  global apps_v1, v1
 
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
+  v1 = client.CoreV1Api()
 
   # check and filter deployment or statefulset has 'service' label defined for pods created by them
   # we will use these as being eligible for horizontal scaling at the container level
@@ -126,10 +128,50 @@ async def get_service_metrics(request: Request):
 
 
 @app.post("/scale/horizontal")
-async def scale_deployment(req: Request):
+async def scale_deployment_horizontal(req: Request):
     global apps_v1
     req_body = await req.json()
     deploy_config = apps_v1.read_namespaced_deployment(name=req_body['deploy_name'], namespace='default')
     deploy_config.spec.replicas = req_body['replicas']
     apps_v1.patch_namespaced_deployment(name=req_body['deploy_name'], namespace='default', body=deploy_config)
+    return {'success': True}
+
+
+@app.post("/scale/vertical")
+async def scale_deployment_vertical(req: Request):
+    global v1
+
+    req_body = await req.json()
+    deploy_name = req_body['deploy_name']
+
+    # update resource limits for deployment which is associated with service pod label
+    pods = v1.list_namespaced_pod(namespace='default', label_selector=f"service={deploy_name}")
+    for pod in pods.items:
+        new_resources = {
+          'cpu': req_body.get('cpu', pod.spec.containers[0]['resources']['limits']['cpu']),
+          'memory': req_body.get('memory', pod.spec.containers[0]['resources']['limits']['memory']),
+        }
+
+        # we assume pods do not need to restart based on resizePolicy: https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/
+        patched_payload = {
+            'spec': {
+                'containers': [
+                    {
+                        'name': pod.spec.containers[0].name,
+                        'resources': {
+                            'requests': new_resources,
+                            'limits': new_resources,
+                        }
+                    }
+                ]
+            }
+        }
+
+        v1.patch_namespaced_pod(
+            name=pod.metadata.name,
+            namespace='default',
+            body=patched_payload,
+            _subresource='resize'
+        )
+
     return {'success': True}
