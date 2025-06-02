@@ -94,14 +94,14 @@ async def get_service_metrics(request: Request):
     ), default_value=0, prom_label='deployment')
 
     return JSONResponse(content = {
-        'services': [
+        'services': {svc:
           [
             round(float(services_cpu.get(svc, 0)), 5),
             round(float(services_mem.get(svc, 0)), 5),
             int(total_replicas.get(svc, 1)),
           ]
           for svc in ALL_SERVICES
-        ],
+        },
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success)),
         'latency_seconds': round(float(raw_request_latency), 3)
