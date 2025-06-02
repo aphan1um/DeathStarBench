@@ -105,6 +105,16 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ), default_value=0, prom_label='deployment')
 
+    global_cpu_util = parse_promql_get_value(execute_promql_query(
+      'sum (rate(container_cpu_usage_seconds_total{namespace="default"}[45s])) / sum (machine_cpu_cores + 1e-6)',
+      query_timestamp
+    ), default_value=0)
+
+    global_mem_util = parse_promql_get_value(execute_promql_query(
+      'sum (rate(container_memory_usage_bytes{namespace="default"}[45s])) / sum (machine_memory_bytes + 1e-6)',
+      query_timestamp
+    ), default_value=0)
+
     return JSONResponse(content = {
         'services': {svc:
           [
@@ -117,7 +127,9 @@ async def get_service_metrics(request: Request):
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success)),
         'latency_p95': round(float(request_latency_p95), 3),
-        'latency_p99': round(float(request_latency_p99), 3)
+        'latency_p99': round(float(request_latency_p99), 3),
+        'global_cpu_util': round(float(global_cpu_util), 4),
+        'global_mem_util': round(float(global_mem_util), 4),
     })
 
 @app.get('/service')
