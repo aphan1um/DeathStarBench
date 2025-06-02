@@ -21,12 +21,15 @@ logging.basicConfig(
     datefmt = "%Y-%m-%d %H:%M:%S"
 )
 
+apps_v1 = None
+
 # retrieve some resource data from Kubernetes before server initialises
 @asynccontextmanager
 async def lifespan(app: FastAPI):
   global ALL_SERVICES
   global ALL_SERVICES_TYPE
   global CONTAINER_NAME_TO_SERVICE_IDX
+  global apps_v1
 
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
@@ -124,6 +127,7 @@ async def get_service_metrics(request: Request):
 
 @app.post("/scale/horizontal")
 def scale_deployment(req: Request):
+    global apps_v1
     deploy_config = apps_v1.read_namespaced_deployment(name=req['deploy_name'], namespace='default')
     deploy_config.spec.replicas = req['replicas']
     apps_v1.patch_namespaced_deployment(name=req['deploy_name'], namespace='default', body=deploy_config)
