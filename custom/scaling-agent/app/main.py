@@ -171,7 +171,7 @@ async def scale_deployment_vertical(req: Request):
             name=pod.metadata.name,
             namespace='default',
             body=patched_payload,
-            _subresource='resize'
+            subresource='resize'
         )
 
     return {'success': True}
