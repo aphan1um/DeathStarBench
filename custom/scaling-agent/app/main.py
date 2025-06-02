@@ -61,8 +61,6 @@ async def get_service_metrics(request: Request):
     global ALL_SERVICES
     query_timestamp = int(time.time() - TIME_OFFSET)
 
-    kube_deployment_spec_replicas{namespace="default"}
-
     # used to define state space
     services_cpu = parse_promql_response_by_service(execute_promql_query(
       'sum by (container) (rate(container_cpu_usage_seconds_total{namespace="default"}[1m])) / sum by (container) (kube_pod_container_resource_limits{namespace="default", resource="cpu"} + 1e-6)',

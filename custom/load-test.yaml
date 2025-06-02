@@ -24,10 +24,10 @@ spec:
                 https://gitlab.engr.illinois.edu/DEPEND/firm.git /DeathStarBench &&
                 cp -r /DeathStarBench/socialNetwork/wrk2/* /scripts/socialNetwork"]
   restartPolicy: Never
-  tolerations:
-    - effect: NoSchedule
-      key: is-monitor
-      operator: Exists
+  # tolerations:
+  #   - effect: NoSchedule
+  #     key: is-monitor
+  #     operator: Exists
   volumes:
   - name: scripts
     emptyDir: {}
