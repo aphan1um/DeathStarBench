@@ -109,8 +109,8 @@ async def get_service_metrics(request: Request):
         },
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success)),
-        'latency_p95': round(float(request_latency_p95), 3),
-        'latency_p99': round(float(request_latency_p99), 3)
+        'latency_p95': round(float(request_latency_p95), 4),
+        'latency_p99': round(float(request_latency_p99), 4)
     })
 
 @app.get('/service')
