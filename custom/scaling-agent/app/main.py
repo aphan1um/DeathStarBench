@@ -23,6 +23,7 @@ logging.basicConfig(
 
 apps_v1 = None
 v1 = None
+k8s_api_client = None
 
 # retrieve some resource data from Kubernetes before server initialises
 @asynccontextmanager
@@ -30,11 +31,12 @@ async def lifespan(app: FastAPI):
   global ALL_SERVICES
   global ALL_SERVICES_TYPE
   global CONTAINER_NAME_TO_SERVICE_IDX
-  global apps_v1, v1
+  global apps_v1, v1, k8s_api_client
 
   config.load_incluster_config()
   apps_v1 = client.AppsV1Api()
   v1 = client.CoreV1Api()
+  k8s_api_client = client.ApiClient()
 
   # check and filter deployment or statefulset has 'service' label defined for pods created by them
   # we will use these as being eligible for horizontal scaling at the container level
@@ -139,7 +141,7 @@ async def scale_deployment_horizontal(req: Request):
 
 @app.post("/scale/vertical")
 async def scale_deployment_vertical(req: Request):
-    global v1
+    global v1, k8s_api_client
 
     req_body = await req.json()
     deploy_name = req_body['deploy_name']
@@ -167,11 +169,12 @@ async def scale_deployment_vertical(req: Request):
             }
         }
 
-        v1.patch_namespaced_pod(
-            name=pod.metadata.name,
-            namespace='default',
-            body=patched_payload,
-            subresource='resize'
+        k8s_api_client.call_api(
+          f"/api/v1/namespaces/default/pods/{pod.metadata.name}/resize",
+          'PATCH',
+          body=patched_payload,
+          header_params={"Content-Type": "application/merge-patch+json"},
+          response_type="V1Pod",
         )
 
     return {'success': True}
