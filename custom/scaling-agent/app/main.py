@@ -120,3 +120,11 @@ async def get_service_metrics(request: Request):
         'services': ALL_SERVICES,
         'total_services': len(ALL_SERVICES),
     })
+
+
+@app.post("/scale/horizontal")
+def scale_deployment(req: Request):
+    deploy_config = apps_v1.read_namespaced_deployment(name=req['deploy_name'], namespace='default')
+    deploy_config.spec.replicas = req['replicas']
+    apps_v1.patch_namespaced_deployment(name=req['deploy_name'], namespace='default', body=deploy_config)
+    return {'success': True}
