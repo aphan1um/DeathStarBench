@@ -148,8 +148,8 @@ async def scale_deployment_vertical(req: Request):
     pods = v1.list_namespaced_pod(namespace='default', label_selector=f"service={deploy_name}")
     for pod in pods.items:
         new_resources = {
-          'cpu': req_body.get('cpu', pod.spec.containers[0]['resources']['limits']['cpu']),
-          'memory': req_body.get('memory', pod.spec.containers[0]['resources']['limits']['memory']),
+          'cpu': req_body.get('cpu', pod.spec.containers[0].resources.limits['cpu']),
+          'memory': req_body.get('memory', pod.spec.containers[0].resources.limits['memory']),
         }
 
         # we assume pods do not need to restart based on resizePolicy: https://kubernetes.io/docs/tasks/configure-pod-container/resize-container-resources/
