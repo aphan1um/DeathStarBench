@@ -175,6 +175,8 @@ async def scale_deployment_vertical(req: Request):
           body=patched_payload,
           header_params={"Content-Type": "application/merge-patch+json"},
           response_type="V1Pod",
-        )
+          auth_settings = ['BearerToken'],
+          _preload_content=False
+        ) # for auth: https://stackoverflow.com/a/63747147
 
     return {'success': True}
