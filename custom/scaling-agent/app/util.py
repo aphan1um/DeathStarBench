@@ -19,12 +19,12 @@ def execute_promql_query(query, time):
   return response_json['data']
 
 
-def parse_promql_response_by_service(data, default_value=None):
+def parse_promql_response_by_service(data, default_value=None, prom_label="container"):
   if not isinstance(data, dict):
     return None
 
   result = data['result']
-  return {item['metric']['container']: item['value'][1] for item in result}
+  return {item['metric'][prom_label]: item['value'][1] for item in result}
 
 
 def parse_promql_get_value(data, default_value=None):

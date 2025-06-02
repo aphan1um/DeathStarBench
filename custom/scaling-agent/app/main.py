@@ -10,7 +10,7 @@ import math
 import os
 import time
 
-TIME_OFFSET = 5
+TIME_OFFSET = 4
 ALL_SERVICES = []
 ALL_SERVICES_TYPE = []
 CONTAINER_NAME_TO_SERVICE_IDX = {}
@@ -65,25 +65,16 @@ async def get_service_metrics(request: Request):
     global ALL_SERVICES
     query_timestamp = int(time.time() - TIME_OFFSET)
 
+    kube_deployment_spec_replicas{namespace="default"}
+
     # used to define state space
     services_cpu = parse_promql_response_by_service(execute_promql_query(
-      'sum by (container) (rate(container_cpu_usage_seconds_total{namespace="default"}[1m])) / sum by (container) (kube_pod_container_resource_requests{namespace="default", resource="cpu"} + 1e-6)',
-      query_timestamp
-    ), default_value=0)
-
-    # cov = coefficient of variation
-    services_cpu_cov = parse_promql_response_by_service(execute_promql_query(
-      'stddev by (container) (rate(container_cpu_usage_seconds_total{namespace="default"}[1m])) / (avg by (container) (rate(container_cpu_usage_seconds_total{namespace="default"}[1m])) + 1e-5)',
+      'sum by (container) (rate(container_cpu_usage_seconds_total{namespace="default"}[1m])) / sum by (container) (kube_pod_container_resource_limits{namespace="default", resource="cpu"} + 1e-6)',
       query_timestamp
     ), default_value=0)
 
     services_mem = parse_promql_response_by_service(execute_promql_query(
-      'sum by (container) (avg_over_time(container_memory_working_set_bytes{namespace="default"}[35s])) / sum by (container) (kube_pod_container_resource_requests{namespace="default", resource="memory"} + 1e-6)',
-      query_timestamp
-    ), default_value={})
-
-    services_mem_cov = parse_promql_response_by_service(execute_promql_query(
-      'stddev by (container) (avg_over_time(container_memory_working_set_bytes{namespace="default"}[35s])) / avg by (container) (kube_pod_container_resource_requests{namespace="default", resource="memory"} + 1e-6)',
+      'sum by (container) (avg_over_time(container_memory_working_set_bytes{namespace="default"}[35s])) / sum by (container) (kube_pod_container_resource_limits{namespace="default", resource="memory"} + 1e-6)',
       query_timestamp
     ), default_value=0)
 
@@ -103,11 +94,16 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ), default_value=0) # note this is in seconds
 
+    total_replicas = parse_promql_response_by_service(execute_promql_query(
+      'kube_deployment_spec_replicas{namespace="default"}'
+    ), default_value=0, prom_label='deployment')
+
     return JSONResponse(content = {
         'services': [
           [
-            round(float(services_cpu.get(svc, 0)), 5), round(float(services_cpu_cov.get(svc, 0)), 4),
-            round(float(services_mem.get(svc, 0)), 5), round(float(services_mem_cov.get(svc, 0)), 4),
+            round(float(services_cpu.get(svc, 0)), 5),
+            round(float(services_mem.get(svc, 0)), 5),
+            total_replicas.get(svc, 1),
           ]
           for svc in ALL_SERVICES
         ],
