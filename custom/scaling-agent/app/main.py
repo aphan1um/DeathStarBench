@@ -89,7 +89,8 @@ async def get_service_metrics(request: Request):
     ), default_value=0) # note this is in seconds
 
     total_replicas = parse_promql_response_by_service(execute_promql_query(
-      'kube_deployment_spec_replicas{namespace="default"}'
+      'kube_deployment_spec_replicas{namespace="default"}',
+      query_timestamp
     ), default_value=0, prom_label='deployment')
 
     return JSONResponse(content = {
