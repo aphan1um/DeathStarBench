@@ -43,8 +43,6 @@ spec:
           env:
             - name: PROMETHEUS_HOSTNAME
               value: prometheus-kube-prometheus-prometheus.monitor.svc.cluster.local:9090
-            - name: ALL_SERVICES_MAX_REPLICAS
-              value: "64"
           volumeMounts:
             - mountPath: /app
               name: appcode

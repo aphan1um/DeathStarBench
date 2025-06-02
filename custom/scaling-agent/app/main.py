@@ -15,8 +15,6 @@ ALL_SERVICES = []
 ALL_SERVICES_TYPE = []
 CONTAINER_NAME_TO_SERVICE_IDX = {}
 
-ALL_SERVICES_MAX_REPLICAS = int(os.getenv('ALL_SERVICES_MAX_REPLICAS'))
-
 logging.basicConfig(
     level   = logging.INFO,
     format  = "%(asctime)s [%(levelname)s] %(message)s",
@@ -54,8 +52,6 @@ async def lifespan(app: FastAPI):
   ALL_SERVICES_TYPE = [d.kind for d in all_services]
 
   logging.info('Obtained services: [' + ','.join(ALL_SERVICES) + ']')
-  logging.info('Maximum amount of pods per service: ' + str(ALL_SERVICES_MAX_REPLICAS))
-
   yield
 
 app = FastAPI(lifespan=lifespan)
@@ -118,5 +114,4 @@ async def get_service_metrics(request: Request):
     return JSONResponse(content = {
         'services': ALL_SERVICES,
         'total_services': len(ALL_SERVICES),
-        'max_replicas': ALL_SERVICES_MAX_REPLICAS
     })
