@@ -83,10 +83,15 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ), default_value=1) # this is a ratio (1 being the best value)
 
-    raw_request_latency = parse_promql_get_value(execute_promql_query(
-      'rate(nginx_http_request_duration_seconds_sum[35s])',
+    request_latency_p95 = parse_promql_get_value(execute_promql_query(
+      'sum(histogram_quantile(0.95, rate(nginx_http_request_duration_seconds_bucket[35s])))',
       query_timestamp
-    ), default_value=0) # note this is in seconds
+    ), default_value=0)
+
+    request_latency_p99 = parse_promql_get_value(execute_promql_query(
+      'sum(histogram_quantile(0.99, rate(nginx_http_request_duration_seconds_bucket[35s])))',
+      query_timestamp
+    ), default_value=0)
 
     total_replicas = parse_promql_response_by_service(execute_promql_query(
       'kube_deployment_spec_replicas{namespace="default"}',
@@ -104,7 +109,8 @@ async def get_service_metrics(request: Request):
         },
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success)),
-        'latency_seconds': round(float(raw_request_latency), 3)
+        'latency_p95': round(float(request_latency_p95), 3),
+        'latency_p99': round(float(request_latency_p99), 3)
     })
 
 @app.get('/service')
