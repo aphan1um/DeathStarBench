@@ -20,7 +20,7 @@ WORKLOAD_RPS = "./test_70d6477dee4d.csv"
 READ_TIMEOUT = 10
 
 TOTAL_USERS_MULTIPLE = 1.5 # how many additional users as a multiple
-LOAD_MULTIPLIER = 8 # defines how much additional load each user can delive
+LOAD_MULTIPLIER = 5 # defines how much additional load each user can delive
 
 workload_rps_parsed = list(map(float, open(WORKLOAD_RPS).read().splitlines()))
 
