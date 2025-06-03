@@ -56,6 +56,9 @@ class EnvSocialNetwork(gym.Env):
         # number (0, 1) representing how important it is to utilise cpu and mem
         self.RESOURCE_UTIL_PRIO = 0.3
 
+        # how many seconds until the environment is observed and action is taken by agent
+        self.QUERY_WAIT_TIME = 18
+
         self.timestep = 0
         self.episode = 0
 

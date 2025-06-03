@@ -17,7 +17,7 @@ NODE_NGINX_ENDPOINT = [
 
 WORKLOAD_RPS = "./test_70d6477dee4d.csv"
 READ_TIMEOUT = 10
-LOAD_MULTIPLIER = 7
+LOAD_MULTIPLIER = 7.5
 
 workload_rps_parsed = list(map(float, open(WORKLOAD_RPS).read().splitlines()))
 
@@ -103,7 +103,7 @@ class StepLoadShape(LoadTestShape):
     current_num_users = 100
     total_users_within_minute = []
 
-    ramp_seconds = 3600 # amount of seconds before achieving peak load
+    ramp_seconds = 2700 # amount of seconds before achieving peak load
     ramp_users = 5
 
     update_users_rate_seconds = 20 # should be divisible by 60
