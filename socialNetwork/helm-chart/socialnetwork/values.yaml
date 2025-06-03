@@ -1,10 +1,10 @@
 global: 
   hpa:
-    enabled: false
+    enabled: true
     minReplicas: 1
-    maxReplicas: 1
-    targetMemoryUtilizationPercentage: '70'
-    targetCPUUtilizationPercentage: '70'
+    maxReplicas: 20
+    targetMemoryUtilizationPercentage: '50'
+    targetCPUUtilizationPercentage: '50'
   resources:
     limits:
       cpu: 500m
