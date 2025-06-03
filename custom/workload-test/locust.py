@@ -16,9 +16,11 @@ NODE_NGINX_ENDPOINT = [
 ]
 
 WORKLOAD_RPS = "./test_70d6477dee4d.csv"
+
 READ_TIMEOUT = 10
-TOTAL_USERS_MULTIPLE = 1.25
-LOAD_MULTIPLIER = 8
+
+TOTAL_USERS_MULTIPLE = 1.5 # how many additional users as a multiple
+LOAD_MULTIPLIER = 8 # defines how much additional load each user can delive
 
 workload_rps_parsed = list(map(float, open(WORKLOAD_RPS).read().splitlines()))
 
