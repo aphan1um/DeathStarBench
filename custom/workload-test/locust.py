@@ -17,7 +17,8 @@ NODE_NGINX_ENDPOINT = [
 
 WORKLOAD_RPS = "./test_70d6477dee4d.csv"
 READ_TIMEOUT = 10
-LOAD_MULTIPLIER = 7.5
+TOTAL_USERS_MULTIPLE = 1.25
+LOAD_MULTIPLIER = 8
 
 workload_rps_parsed = list(map(float, open(WORKLOAD_RPS).read().splitlines()))
 
@@ -117,7 +118,7 @@ class StepLoadShape(LoadTestShape):
         if curr_second % self.update_users_rate_seconds == 0:
             new_time_interval = int(curr_second / 60)
             if new_time_interval > self.time_interval:
-                workload_rps_new = workload_rps_parsed[min(self.time_interval, len(workload_rps_parsed))]
+                workload_rps_new = workload_rps_parsed[min(self.time_interval, len(workload_rps_parsed))] * TOTAL_USERS_MULTIPLE
                 self.time_interval = new_time_interval
                 self.total_users_within_minute = np.random.poisson(workload_rps_new, int(60/self.update_users_rate_seconds))
 
