@@ -2,15 +2,15 @@ global:
   hpa:
     enabled: true
     minReplicas: 1
-    maxReplicas: 20
+    maxReplicas: 25
     targetMemoryUtilizationPercentage: '50'
     targetCPUUtilizationPercentage: '50'
   resources:
     limits:
-      cpu: 500m
+      cpu: 400m
       memory: 500Mi
     requests:
-      cpu: 500m
+      cpu: 400m
       memory: 500Mi
   replicas: 1
   imagePullPolicy: "IfNotPresent"
