@@ -153,7 +153,6 @@ async def scale_deployment_horizontal(req: Request):
     apps_v1.patch_namespaced_deployment(name=req_body['deploy_name'], namespace='default', body=deploy_config)
     
     resp = {'success': True, 'new_replicas': deploy_config.spec.replicas}
-    print(resp)
     return resp
 
 
@@ -189,6 +188,8 @@ async def scale_deployment_vertical(req: Request):
             }
         }
 
+        print(patched_payload)
+
         k8s_api_client.call_api(
           f"/api/v1/namespaces/default/pods/{pod.metadata.name}/resize",
           'PATCH',
@@ -200,7 +201,6 @@ async def scale_deployment_vertical(req: Request):
         ) # for auth: https://stackoverflow.com/a/63747147
 
     resp = {'success': True, 'patch': patched_payload}
-    print(resp)
     return resp
 
 
