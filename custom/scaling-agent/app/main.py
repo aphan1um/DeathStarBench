@@ -210,14 +210,16 @@ async def scale_deployment_vertical(req: Request):
     resp = {'success': True, 'patch': patched_payload}
     return resp
 
+@app.get('/service/reset_all')
+async def reset_all_service_state(request: Request):
+    reset_env_script = """
+      kubectl get deploy -n default -o name --no-headers | while read name; do
+        kubectl scale $name -n default --replicas=1
+      done
+      kubectl delete po --all -n default
+    """
+    subprocess.run(reset_env_script, shell=True, executable="/bin/bash")
 
-
-# def reset_env():
-#     # set amount of pods per service to 1
-#     for deploy in apps_v1.list_namespaced_deployment(namespace='default').items:
-#       apps_v1.patch_namespaced_deployment_scale(
-#           name=deploy.metadata.name,
-#           namespace='default',
-#           body={"spec": {"replicas": 1}}
-#       )
-
+    return JSONResponse(content = {
+        'success': True
+    })
