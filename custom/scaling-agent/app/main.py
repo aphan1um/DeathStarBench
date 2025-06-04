@@ -92,8 +92,8 @@ async def get_service_metrics(request: Request):
       query_timestamp
     ), default_value=1) # this is a ratio (1 being the best value)
 
-    request_latency_p95 = parse_promql_get_value(execute_promql_query(
-      'sum(histogram_quantile(0.95, rate(nginx_http_request_duration_seconds_bucket[35s])))',
+    request_latency_p98 = parse_promql_get_value(execute_promql_query(
+      'sum(histogram_quantile(0.98, rate(nginx_http_request_duration_seconds_bucket[35s])))',
       query_timestamp
     ), default_value=0)
 
@@ -128,7 +128,7 @@ async def get_service_metrics(request: Request):
         },
         'tps': math.ceil(float(raw_tps)),
         'tps_success': math.ceil(float(raw_tps_success)),
-        'latency_p95': round(float(request_latency_p95), 3),
+        'latency_p98': round(float(request_latency_p98), 3),
         'latency_p99': round(float(request_latency_p99), 3),
         'global_cpu_util': round(float(global_cpu_util), 4),
         'global_mem_util': round(float(global_mem_util), 4),
