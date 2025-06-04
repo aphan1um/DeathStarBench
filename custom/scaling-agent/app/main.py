@@ -203,7 +203,7 @@ async def scale_deployment_vertical(req: Request):
         # ) # for auth: https://stackoverflow.com/a/63747147
 
         resize_script = f"""
-           kubectl patch pod {pod.metadata.name} --subresource resize --patch '{json.dumps(patched_payload)}'
+           kubectl patch pod {pod.metadata.name} -n default --subresource resize --patch '{json.dumps(patched_payload)}'
         """
         subprocess.run(resize_script, shell=True, executable="/bin/bash")
 
