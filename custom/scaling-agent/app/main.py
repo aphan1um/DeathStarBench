@@ -148,7 +148,7 @@ async def scale_deployment_horizontal(req: Request):
     deploy_config = apps_v1.read_namespaced_deployment(name=req_body['deploy_name'], namespace='default')
     deploy_config.spec.replicas = req_body['replicas']
     apps_v1.patch_namespaced_deployment(name=req_body['deploy_name'], namespace='default', body=deploy_config)
-    return {'success': True}
+    return {'success': True, 'new_replicas': deploy_config.spec.replicas}
 
 
 @app.post("/scale/vertical")
@@ -191,4 +191,16 @@ async def scale_deployment_vertical(req: Request):
           _preload_content=False
         ) # for auth: https://stackoverflow.com/a/63747147
 
-    return {'success': True}
+    return {'success': True, 'patch': patched_payload}
+
+
+
+# def reset_env():
+#     # set amount of pods per service to 1
+#     for deploy in apps_v1.list_namespaced_deployment(namespace='default').items:
+#       apps_v1.patch_namespaced_deployment_scale(
+#           name=deploy.metadata.name,
+#           namespace='default',
+#           body={"spec": {"replicas": 1}}
+#       )
+
