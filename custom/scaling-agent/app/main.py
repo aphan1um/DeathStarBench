@@ -8,6 +8,8 @@ from util import execute_promql_query, parse_promql_response_by_service, parse_p
 import logging
 import math
 import os
+import subprocess
+import json
 import time
 
 TIME_OFFSET = 4
@@ -190,15 +192,20 @@ async def scale_deployment_vertical(req: Request):
 
         print(patched_payload)
 
-        k8s_api_client.call_api(
-          f"/api/v1/namespaces/default/pods/{pod.metadata.name}/resize",
-          'PATCH',
-          body=patched_payload,
-          header_params={"Content-Type": "application/merge-patch+json"},
-          response_type="V1Pod",
-          auth_settings = ['BearerToken'],
-          _preload_content=False
-        ) # for auth: https://stackoverflow.com/a/63747147
+        # k8s_api_client.call_api(
+        #   f"/api/v1/namespaces/default/pods/{pod.metadata.name}/resize",
+        #   'PATCH',
+        #   body=patched_payload,
+        #   header_params={"Content-Type": "application/merge-patch+json"},
+        #   response_type="V1Pod",
+        #   auth_settings = ['BearerToken'],
+        #   _preload_content=False
+        # ) # for auth: https://stackoverflow.com/a/63747147
+
+        resize_script = f"""
+           kubectl patch pod {pod.metadata.name} --subresource resize --patch '{json.dumps(patched_payload)}'
+        """
+        subprocess.run(resize_script, shell=True, executable="/bin/bash")
 
     resp = {'success': True, 'patch': patched_payload}
     return resp
