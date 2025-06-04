@@ -145,6 +145,9 @@ async def get_service_metrics(request: Request):
 async def scale_deployment_horizontal(req: Request):
     global apps_v1
     req_body = await req.json()
+
+    print(req_body)
+
     deploy_config = apps_v1.read_namespaced_deployment(name=req_body['deploy_name'], namespace='default')
     deploy_config.spec.replicas = req_body['replicas']
     apps_v1.patch_namespaced_deployment(name=req_body['deploy_name'], namespace='default', body=deploy_config)
@@ -160,6 +163,8 @@ async def scale_deployment_vertical(req: Request):
 
     req_body = await req.json()
     deploy_name = req_body['deploy_name']
+
+    print(req_body)
 
     # update resource limits for deployment which is associated with service pod label
     pods = v1.list_namespaced_pod(namespace='default', label_selector=f"service={deploy_name}")
